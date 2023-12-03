@@ -32,8 +32,8 @@ let game_of_line line : game =
   id, color_lists
 
 let is_game_possible (game: game) = 
-  let is_impossible {r; g; b} = r > 12 || g > 13 || b > 14 in 
-  snd game |> List.exists is_impossible |> not
+  let is_possible {r; g; b} = r <= 12 && g <= 13 && b <= 14 in 
+  snd game |> List.for_all is_possible
 
 let unzip (l: cube_set list) = 
   List.map (fun x -> x.r) l, List.map (fun x -> x.g) l, List.map (fun x -> x.b) l
