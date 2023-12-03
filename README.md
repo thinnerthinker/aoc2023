@@ -27,5 +27,5 @@ To interactively run and test the solutions using `utop`, see this example:
    dune utop
    
    open Aoc;;
-   Util.read_all_lines "input3.txt" |> Day03.part2;;
+   Util.read_all_lines "inputs/input3.txt" |> Day03.part2;;
    ```
