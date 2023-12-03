@@ -3,11 +3,6 @@
 ## Overview
 This repository contains my solutions for the [Advent of Code 2023](https://adventofcode.com/2023) challenges, implemented in OCaml.
 
-## Structure
-- **Language**: OCaml
-- **Build System**: Dune (version 3.9)
-- **Package Management**: OPAM (with generated OPAM files)
-
 ## Installation and Usage
 ### Prerequisites
 - [OCaml](https://ocaml.org/)
@@ -20,7 +15,7 @@ This repository contains my solutions for the [Advent of Code 2023](https://adve
    dune build
    ```
 
-### Running Solutions in Utop
+### Running Solutions
 To run the solutions for every day, use the included test:
 
    ```bash
