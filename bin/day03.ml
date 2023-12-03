@@ -1,8 +1,7 @@
 open Util
 
 let indexes_of pred = List.mapi (fun i x -> if pred x then i else -1) >> List.filter (fun x -> x >= 0)
-let indexed (l: 'a list list) : (('a * int) list) = 
-  List.mapi (fun i es -> List.map (fun e -> e, i) es) l |> List.flatten
+let indexed (l: 'a list list) : (('a * int) list) = List.mapi (fun i es -> List.map (fun e -> e, i) es) l |> List.flatten
 
 let part_coordinates_of_lines is_part = List.map (indexes_of is_part) >> indexed
 let neighbors_of_coordinate (x, y) = List.init 3 (fun dx -> List.init 3 (fun dy -> (x + dx - 1, y + dy - 1))) |> List.flatten
