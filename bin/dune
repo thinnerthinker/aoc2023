@@ -1,0 +1,4 @@
+(library
+ (name aoc)
+ (modules Util Day01 Day02 Day03)
+ (libraries aoc2023))
