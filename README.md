@@ -21,11 +21,8 @@ This repository contains my solutions for the [Advent of Code 2023](https://adve
    ```
 
 ### Running Solutions in Utop
-To interactively run and test the solutions using `utop`, see this example:
+To run the solutions for every day, use the included test:
 
    ```bash
-   dune utop
-   
-   open Aoc;;
-   Util.read_all_lines "inputs/input3.txt" |> Day03.part2;;
+   dune runtest
    ```
