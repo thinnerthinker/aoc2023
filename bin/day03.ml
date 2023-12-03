@@ -1,17 +1,10 @@
 open Util
 
 let indexes_of pred = List.mapi (fun i x -> if pred x then i else -1) >> List.filter (fun x -> x >= 0)
-
 let indexed (l: 'a list list) : (('a * int) list) list = List.mapi (fun i es -> List.map (fun e -> e, i) es) l
 
-let part_coordinates_of_lines is_part lines = lines 
-  |> List.map (indexes_of is_part)
-  |> indexed
-  |> List.flatten
-
-let neighbors_of_coordinate (x, y) = 
-  List.init 3 (fun dx -> List.init 3 (fun dy -> (x + dx - 1, y + dy - 1)))
-  |> List.flatten
+let part_coordinates_of_lines is_part = List.map (indexes_of is_part) >> indexed >> List.flatten
+let neighbors_of_coordinate (x, y) = List.init 3 (fun dx -> List.init 3 (fun dy -> (x + dx - 1, y + dy - 1))) |> List.flatten
 
 let number_ranges_of_line str = 
   let is_digit = function '0'..'9' -> true | _ -> false in
@@ -19,7 +12,8 @@ let number_ranges_of_line str =
   
   let rec numbers (s, e, n) = function
   | x :: xs when is_digit x -> numbers (s, e + 1, n * 10 + to_int_digit x) xs
-  | _ :: xs -> if n != 0 then (s, e - 1, n) :: numbers (e + 1, e + 1, 0) xs else numbers (e + 1, e + 1, 0) xs
+  | _ :: xs -> let reset = (e + 1, e + 1, 0) in
+    if n != 0 then (s, e - 1, n) :: numbers reset xs else numbers reset xs
   | [] -> if n != 0 then [(s, e - 1, n)] else [] 
   in
   numbers (0, 0, 0) str
@@ -61,5 +55,5 @@ let part2 input =
   |> List.map (neighbors_of_coordinate >> numbers_from_overlaps)
   |> List.filter (fun l -> List.length l == 2)
   |> List.map (List.map (fun ((_, _, n), _) -> n))
-  |> List.map (function | (a :: b :: _) -> a * b | _ -> raise (GearError "dumb gear bro."))
+  |> List.map (function | a :: b :: _ -> a * b | _ -> raise (GearError "dumb gear bro."))
   |> sum
