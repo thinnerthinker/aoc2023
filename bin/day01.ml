@@ -4,8 +4,7 @@ let is_digit = function '0'..'9' -> true | _ -> false
 let to_int_digit c = Char.code c - Char.code '0'
 
 let find_all str key = 
-  let strlen = String.length str in
-  let keylen = String.length key in
+  let strlen, keylen = String.length str, String.length key in
   let rec find i =
     if i + keylen > strlen then
       []

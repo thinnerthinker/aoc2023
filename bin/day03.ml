@@ -20,6 +20,7 @@ let number_ranges_of_line str =
 
 exception GearError of string
 
+
 let part1 input = 
   let lines = input
   |> List.map char_list_of_string in
