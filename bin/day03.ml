@@ -1,9 +1,10 @@
 open Util
 
 let indexes_of pred = List.mapi (fun i x -> if pred x then i else -1) >> List.filter (fun x -> x >= 0)
-let indexed (l: 'a list list) : (('a * int) list) list = List.mapi (fun i es -> List.map (fun e -> e, i) es) l
+let indexed (l: 'a list list) : (('a * int) list) = 
+  List.mapi (fun i es -> List.map (fun e -> e, i) es) l |> List.flatten
 
-let part_coordinates_of_lines is_part = List.map (indexes_of is_part) >> indexed >> List.flatten
+let part_coordinates_of_lines is_part = List.map (indexes_of is_part) >> indexed
 let neighbors_of_coordinate (x, y) = List.init 3 (fun dx -> List.init 3 (fun dy -> (x + dx - 1, y + dy - 1))) |> List.flatten
 
 let number_ranges_of_line str = 
@@ -30,9 +31,7 @@ let part1 input =
   |> List.flatten in
 
   lines
-  |> List.map number_ranges_of_line
-  |> indexed
-  |> List.flatten
+  |> List.map number_ranges_of_line |> indexed
   |> List.filter (fun ((s, e, _), i) -> overlaps |> List.exists (fun (x, y) -> x >= s && x <= e && y == i))
   |> List.map (fun ((_, _, n), _) -> n)
   |> sum
@@ -41,10 +40,7 @@ let part2 input =
   let lines = input
   |> List.map char_list_of_string in
   
-  let numbers = lines
-  |> List.map number_ranges_of_line
-  |> indexed
-  |> List.flatten in
+  let numbers = lines |> List.map number_ranges_of_line |> indexed in
 
   let numbers_from_overlaps neighborhood = numbers
     |> List.filter (fun ((s, e, _n), i) -> neighborhood 
