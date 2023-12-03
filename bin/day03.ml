@@ -1,17 +1,8 @@
 open Util
 
-let indexes_of pred l = 
-  let rec search ind = function
-  | x :: xs -> 
-    let next = search (ind + 1) xs in 
-    if pred x then ind :: next else next
-  | [] -> []
-  in
-  search 0 l
+let indexes_of pred = List.mapi (fun i x -> if pred x then i else -1) >> List.filter (fun x -> x >= 0)
 
-let indexed l = 
-  List.combine (List.init (List.length l) Fun.id) l
-  |> List.map (fun (i, es) -> es |> List.map (fun e -> e, i)) 
+let indexed (l: 'a list list) : (('a * int) list) list = List.mapi (fun i es -> List.map (fun e -> e, i) es) l
 
 let part_coordinates_of_lines is_part lines = lines 
   |> List.map (indexes_of is_part)
