@@ -12,8 +12,8 @@ let number_ranges_of_line str =
   
   let rec numbers (s, e, n) = function
   | x :: xs when is_digit x -> numbers (s, e + 1, n * 10 + to_int_digit x) xs
-  | _ :: xs -> let reset = (e + 1, e + 1, 0) in
-    if n != 0 then (s, e - 1, n) :: numbers reset xs else numbers reset xs
+  | _ :: xs -> let next = numbers (e + 1, e + 1, 0) xs in
+    if n != 0 then (s, e - 1, n) :: next else next
   | [] -> if n != 0 then [(s, e - 1, n)] else [] 
   in
   numbers (0, 0, 0) str
