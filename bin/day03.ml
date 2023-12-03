@@ -19,10 +19,7 @@ let part_coordinates_of_lines is_part lines = lines
   |> List.flatten
 
 let neighbors_of_coordinate (x, y) = 
-  let span = List.init 3 (fun x -> x - 1) in
-  span 
-  |> List.map (fun dx -> x + dx, y) 
-  |> List.map (fun (x, y) -> span |> List.map (fun dy -> x, y + dy))
+  List.init 3 (fun dx -> List.init 3 (fun dy -> (x + dx - 1, y + dy - 1)))
   |> List.flatten
 
 let number_ranges_of_line str = 
