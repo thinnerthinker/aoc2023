@@ -1,2 +1,4 @@
 (test
- (name aoc2023))
+ (name aoc2023)
+ (deps (glob_files inputs/*))
+ (libraries aoc))
