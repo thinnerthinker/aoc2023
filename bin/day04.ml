@@ -32,8 +32,7 @@ let part1 input = input
   |> List.map (fun m -> if m == 0 then 0 else Int.shift_left 1 (m - 1))
   |> sum
 
-let part2 input = 
-  input
+let part2 input = input
   |> List.map card_of_line
   |> List.map matches_of_card
   |> counts_of_multicards
