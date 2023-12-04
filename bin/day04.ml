@@ -26,14 +26,10 @@ let counts_of_multicards =
   >> List.map (fun mc -> mc.count) 
 
 
-let part1 input = input
+let solve transform input = input
   |> List.map card_of_line
   |> List.map matches_of_card
-  |> List.map (fun m -> if m == 0 then 0 else Int.shift_left 1 (m - 1))
-  |> sum
+  |> transform |> sum
 
-let part2 input = input
-  |> List.map card_of_line
-  |> List.map matches_of_card
-  |> counts_of_multicards
-  |> sum
+let part1 = solve (List.map (fun m -> if m == 0 then 0 else Int.shift_left 1 (m - 1)))
+let part2 = solve counts_of_multicards
