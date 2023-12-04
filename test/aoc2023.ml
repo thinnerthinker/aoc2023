@@ -1,5 +1,20 @@
 open Aoc
 
+let read_all_lines path = 
+  let in_channel = open_in path in
+  try
+    let rec read_lines () =
+      try
+        let line = input_line in_channel in
+        line :: read_lines ()
+      with End_of_file -> []
+    in
+    read_lines ()
+  with e ->
+    close_in_noerr in_channel;
+    raise e
+
+
 type solver = int * (string list -> int) list
 
 let () = 
@@ -13,7 +28,7 @@ let () =
   
   let _ = solvers |> List.map (fun (i, ps) -> 
     let ind = string_of_int i in
-    let input = Util.read_all_lines ("inputs/input" ^ ind ^ ".txt") in
+    let input = read_all_lines ("inputs/input" ^ ind ^ ".txt") in
     print_endline ("Day " ^ ind ^ ": " ^ 
       (List.map (fun p -> string_of_int (p input)) ps |> String.concat " ")
     ))
