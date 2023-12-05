@@ -5,13 +5,11 @@ type cube_set_unnorm = (int * color) list
 type cube_set = {r: int; g: int; b: int}
 type game = int * cube_set list
 
-exception ColorError of string
-
 let color_of_string = function
 | "red" -> Red
 | "green" -> Green
 | "blue" -> Blue
-| _ -> raise (ColorError "Bro invalid color.")
+| _ -> raise Unreachable
 
 let cube_set_unnorm_of_string str : cube_set_unnorm =
   String.split_on_char ',' str |> List.map (fun str ->

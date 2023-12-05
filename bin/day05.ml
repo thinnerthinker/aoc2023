@@ -13,7 +13,6 @@ let split_on pred l =
 
 type mapping = { dest: int; src: int; len: int }
 let end_m mapping = mapping.src + mapping.len
-exception MappingError
 
 let parse input = 
   let hd_segments = String.split_on_char ':' (List.hd input) in
@@ -21,7 +20,7 @@ let parse input =
 
   let mappings = input |> List.tl |> List.tl |> split_on is_blank |> List.map List.tl
   |> List.map (List.map (numbers_of_string >> 
-    (function | [d; s; l] -> { dest = d; src = s; len = l } | _ -> raise MappingError)))
+    (function | [d; s; l] -> { dest = d; src = s; len = l } | _ -> raise Unreachable)))
   in
   seeds, mappings
 

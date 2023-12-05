@@ -18,8 +18,6 @@ let number_ranges_of_line str =
   in
   numbers (0, 0, 0) str
 
-exception GearError of string
-
 
 let part1 input = 
   let lines = input
@@ -51,5 +49,5 @@ let part2 input =
   |> List.map (neighbors_of_coordinate >> numbers_from_overlaps)
   |> List.filter (fun l -> List.length l == 2)
   |> List.map (List.map (fun ((_, _, n), _) -> n))
-  |> List.map (function | a :: b :: _ -> a * b | _ -> raise (GearError "dumb gear bro."))
+  |> List.map (function | a :: b :: _ -> a * b | _ -> raise Unreachable)
   |> sum
