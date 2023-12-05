@@ -42,8 +42,8 @@ let apply_mappings_to_range seed mappings =
 
 
 let solve build_range input = 
-  let seeds, mappings = parse input in
-
+  let seeds, mappings = parse input 
+  in
   build_range seeds
   |> List.map (fun s -> List.fold_left (fun ss m -> 
     List.map (fun s -> apply_mappings_to_range s m) ss |> List.flatten) [s] mappings)
@@ -51,5 +51,6 @@ let solve build_range input =
   |> List.fold_left min Int.max_int
 
 let part1 = solve (List.map (fun s -> { start = s; len = 1 }))
-let part2 = solve (fun seeds -> (List.map2 (fun s l -> { start = s; len = l }) 
-  (List.filteri (fun i _ -> Int.rem i 2 == 0) seeds) (List.filteri (fun i _ -> Int.rem i 2 == 1) seeds)))
+let part2 = solve (fun seeds -> 
+  let of_parity p = List.filteri (fun i _ -> Int.rem i 2 == p) seeds in
+  List.map2 (fun s l -> { start = s; len = l }) (of_parity 0) (of_parity 1))
