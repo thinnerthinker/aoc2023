@@ -16,7 +16,15 @@ This repository contains my solutions for the [Advent of Code 2023](https://adve
    ```
 
 ### Running Solutions
-To run the solutions for every day, use the included test:
+1. Create an `inputs` directory inside `test`: 
+   ```bash
+   cd test
+   mkdir inputs
+   ```
+
+2. Copy your inputs from each day into the directory. The files shall be named `input{day}.txt`, where `{day}` is replaced with the day's number counted from 1 (e.g. `input1.txt`, `input2.txt`, ..., `input25.txt`).
+
+3. Run the included test:
 
    ```bash
    dune runtest
