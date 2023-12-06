@@ -1,7 +1,6 @@
 open Util
 
 let is_blank x = String.length x == 0
-let numbers_of_string = String.split_on_char ' ' >> List.filter (is_blank >> not) >> List.map int_of_string
 
 let split_on pred l =
   let rec split acc = function

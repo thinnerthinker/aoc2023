@@ -1,7 +1,5 @@
 open Util
 
-let numbers_of_string = String.split_on_char ' ' >> List.filter (fun x -> String.length x > 0) >> List.map int_of_string
-
 let card_of_line line = 
   let segments = String.split_on_char ':' line in
   let _label, numbers = List.nth segments 0, List.nth segments 1 in
