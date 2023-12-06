@@ -25,7 +25,7 @@ let () =
     3, [Day03.part1; Day03.part2];
     4, [Day04.part1; Day04.part2];
     5, [Day05.part1; Day05.part2];
-    6, [Day06.part1; ];
+    6, [Day06.part1; Day06.part2];
   ] in
   
   let _ = solvers |> List.map (fun (i, ps) -> 
