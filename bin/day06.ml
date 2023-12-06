@@ -1,6 +1,5 @@
 open Util
 
-let numbers_of_string = String.split_on_char ' ' >> List.filter (fun s -> String.length s > 0) >> List.map int_of_string
 let numbers_of_line line = List.nth (String.split_on_char ':' line) 1 |> numbers_of_string 
 
 
