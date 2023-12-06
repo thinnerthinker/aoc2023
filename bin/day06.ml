@@ -10,7 +10,8 @@ let solve build_numbers input =
   in
   List.map2 (fun t d -> (
     let delta = sqrt (float_of_int (t * t - 4 * d)) in
-    int_of_float (ceil ((float_of_int t +. delta) /. 2. -. 1.) -. floor ((float_of_int t -. delta) /. 2. +. 1.)) + 1
+    let t = float_of_int t in
+    int_of_float (ceil ((t +. delta) /. 2. -. 1.) -. floor ((t -. delta) /. 2. +. 1.)) + 1
   )) (List.nth numbers 0) (List.nth numbers 1)
   |> List.fold_left Int.mul 1
 
