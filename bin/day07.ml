@@ -14,19 +14,19 @@ let parse_input transform = p_any (p_new (fun t s -> t, s)
 |. p_sps
 |= p_int |. p_lf_opt)
 
-let joker_up j sc = match j with
-| 0 -> sc
-| 1 -> (match sc with
+let joker_up jokers groups = match jokers with
+| 0 -> groups
+| 1 -> (match groups with
   | [4] -> [5]
   | [3; 1] -> [4; 1]
   | [2; 2] -> [3; 2]
   | [2; 1; 1] -> [3; 1; 1]
   | [1; 1; 1; 1] | _ -> [2; 1; 1; 1])
-| 2 -> (match sc with
+| 2 -> (match groups with
   | [3] -> [5]
   | [2; 1] -> [4; 1]
   | [1; 1; 1] | _ -> [3; 1; 1])
-| 3 -> (match sc with
+| 3 -> (match groups with
   | [2] -> [5]
   | [1; 1] | _ -> [4; 1])
 | 4 | 5 | _ -> [5]
