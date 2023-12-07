@@ -1,4 +1,5 @@
-open Util
+open Aoc2023.Util
+open Aoc2023.Parsing
 
 type color = Red | Green | Blue
 type cube_set_unnorm = (int * color) list
@@ -11,23 +12,19 @@ let color_of_string = function
 | "blue" -> Blue
 | _ -> raise Unreachable
 
-let cube_set_unnorm_of_string str : cube_set_unnorm =
-  String.split_on_char ',' str |> List.map (fun str ->
-    let segments = String.split_on_char ' ' str in
-    List.nth segments 1 |> int_of_string, List.nth segments 2 |> color_of_string)
+let parse_cube_set_unnorm = p_more (p_new (fun a c -> a, c)
+  |= p_int |. p_sps
+  |= p_ifs c_alpha +> string_of_char_list +> color_of_string
+  |. p_str_opt ", ")
 
 let normalize_cube_set (unnorm: cube_set_unnorm) : cube_set = 
   let sum_of_color color = unnorm |> List.filter (fun c -> snd c == color) |> List.map fst |> sum in
   { r = sum_of_color Red; g = sum_of_color Green; b = sum_of_color Blue }
 
-let game_of_line line : game = 
-  let segments = String.split_on_char ':' line in
-  let label, colors = List.nth segments 0, List.nth segments 1 in
-
-  let id = List.nth (String.split_on_char ' ' label) 1 |> int_of_string in
-  let color_lists = String.split_on_char ';' colors |> List.map (cube_set_unnorm_of_string >> normalize_cube_set) in
-
-  id, color_lists
+let parse_game : game parser = p_new (fun i l -> i, l)
+|. p_str "Game "
+|= p_int |. p_str ": "
+|= p_any (parse_cube_set_unnorm +> normalize_cube_set |. p_str_opt "; ")
 
 let is_game_possible (game: game) = 
   let is_possible {r; g; b} = r <= 12 && g <= 13 && b <= 14 in 
@@ -43,12 +40,12 @@ let power_of_game (game: game) =
 
 
 let part1 input = input
-  |> List.map game_of_line
-  |> List.filter is_game_possible
-  |> List.map fst
-  |> sum
-  
+|> parse_string (p_any (parse_game |. p_lf_opt))
+|> List.filter is_game_possible
+|> List.map fst
+|> sum
+
 let part2 input = input
-  |> List.map game_of_line
-  |> List.map power_of_game
-  |> sum
+|> parse_string (p_any (parse_game |. p_lf_opt))
+|> List.map power_of_game
+|> sum

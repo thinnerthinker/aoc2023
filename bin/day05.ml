@@ -1,27 +1,19 @@
-open Util
-
-let is_blank x = String.length x == 0
-
-let split_on pred l =
-  let rec split acc = function
-  | x :: xs when pred x -> (List.rev acc) :: split [] xs
-  | x :: xs -> split (x :: acc) xs 
-  | [] -> [List.rev acc]
-  in
-  split [] l
+open Aoc2023.Parsing
 
 type mapping = { dest: int; src: int; len: int }
 let end_m mapping = mapping.src + mapping.len
 
-let parse input = 
-  let hd_segments = String.split_on_char ':' (List.hd input) in
-  let seeds = List.nth hd_segments 1 |> numbers_of_string in
-
-  let mappings = input |> List.tl |> List.tl |> split_on is_blank |> List.map List.tl
-  |> List.map (List.map (numbers_of_string >> 
-    (function | [d; s; l] -> { dest = d; src = s; len = l } | _ -> raise Unreachable)))
-  in
-  seeds, mappings
+let parse_input = p_new (fun s ms -> s, ms)
+|. p_str "seeds:" |. p_sps
+|= p_any (p_int |. p_sps)
+|. p_lf |. p_lf
+|= p_any (p_new Fun.id
+  |. p_end_lf
+  |= p_any (p_new (fun d s l -> { dest = d; src = s; len = l; }) 
+    |= p_int |. p_sps 
+    |= p_int |. p_sps 
+    |= p_int |. p_lf_opt)
+  |. p_lf_opt)
 
 type seed_range = { start: int; len: int }
 let end_r range = range.start + range.len
@@ -40,7 +32,7 @@ let apply_mappings_to_range seed mappings =
 
 
 let solve build_range input = 
-  let seeds, mappings = parse input 
+  let seeds, mappings = input |> parse_string parse_input
   in
   build_range seeds
   |> List.map (fun s -> List.fold_left (fun ss m -> 
