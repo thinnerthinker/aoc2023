@@ -12,8 +12,6 @@ let parse_input = p_any (p_new (fun t s -> t, s)
 |. p_sps
 |= p_int |. p_lf_opt)
 
-let fart1 input = input 
-|> parse_string parse_input
 
 let part1 input = input 
 |> parse_string parse_input
