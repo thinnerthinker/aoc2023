@@ -1,21 +1,13 @@
 open Aoc
 
-let read_all_lines path = 
-  let in_channel = open_in path in
-  try
-    let rec read_lines () =
-      try
-        let line = input_line in_channel in
-        line :: read_lines ()
-      with End_of_file -> []
-    in
-    read_lines ()
-  with e ->
-    close_in_noerr in_channel;
-    raise e
+let read_input path = 
+  let ch = open_in_bin path in
+  let s = really_input_string ch (in_channel_length ch) in
+  close_in ch;
+  s
 
 
-type solver = int * (string list -> int) list
+type solver = int * (string -> int) list
 
 let () = 
   (* added explicit day indices so i can comment the previous days out while debugging *)
@@ -30,7 +22,7 @@ let () =
   
   let _ = solvers |> List.map (fun (i, ps) -> 
     let ind = string_of_int i in
-    let input = read_all_lines ("inputs/input" ^ ind ^ ".txt") in
+    let input = read_input ("inputs/input" ^ ind ^ ".txt") in
     print_endline ("Day " ^ ind ^ ": " ^ 
       (List.map (fun p -> string_of_int (p input)) ps |> String.concat " ")
     ))

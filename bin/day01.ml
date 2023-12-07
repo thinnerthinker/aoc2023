@@ -1,6 +1,6 @@
-open Util
+open Aoc2023.Util
+open Aoc2023.Parsing
 
-let is_digit = function '0'..'9' -> true | _ -> false
 let to_int_digit c = Char.code c - Char.code '0'
 
 let find_all str key = 
@@ -40,13 +40,15 @@ let first_last_of_all_digits str =
 
 
 let part1 input = input
-  |> List.map char_list_of_string
-  |> List.map (List.find_all is_digit 
-    >> first_last 
-    >> (fun (a, b) -> to_int_digit a * 10 + to_int_digit b))
-  |> sum
+|> String.split_on_char '\n'
+|> List.map char_list_of_string
+|> List.map (List.find_all c_digit 
+  >> first_last 
+  >> (fun (a, b) -> to_int_digit a * 10 + to_int_digit b))
+|> sum
 
 let part2 input = input
-  |> List.map first_last_of_all_digits
-  |> List.map (fun (a, b) -> a * 10 + b)
-  |> sum
+|> String.split_on_char '\n'
+|> List.map first_last_of_all_digits
+|> List.map (fun (a, b) -> a * 10 + b)
+|> sum

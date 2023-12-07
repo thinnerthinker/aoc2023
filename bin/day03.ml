@@ -1,4 +1,5 @@
-open Util
+open Aoc2023.Util
+open Aoc2023.Parsing
 
 let indexes_of pred = List.mapi (fun i x -> if pred x then i else -1) >> List.filter (fun x -> x >= 0)
 let indexed (l: 'a list list) : (('a * int) list) = List.mapi (fun i es -> List.map (fun e -> e, i) es) l |> List.flatten
@@ -21,6 +22,7 @@ let number_ranges_of_line str =
 
 let part1 input = 
   let lines = input
+  |> String.split_on_char '\n'
   |> List.map char_list_of_string in
   
   let overlaps = lines
@@ -36,6 +38,7 @@ let part1 input =
 
 let part2 input = 
   let lines = input
+  |> String.split_on_char '\n'
   |> List.map char_list_of_string in
   
   let numbers = lines |> List.map number_ranges_of_line |> indexed in
