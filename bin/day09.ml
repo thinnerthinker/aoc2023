@@ -14,10 +14,13 @@ let extrapolate nums =
   let rec diffseq l =
     if List.for_all (Int.equal 0) l then [] else l :: diffseq (diff l)
   in
-  diffseq (List.rev nums)
-  |> List.map List.hd |> sum
+  diffseq (List.rev nums) |> List.map List.hd |> sum
 
 
 let part1 input = parse_string parse_input input
 |> List.map extrapolate
+|> sum
+
+let part2 input = parse_string parse_input input
+|> List.map (List.rev >> extrapolate)
 |> sum
