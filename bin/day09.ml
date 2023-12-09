@@ -1,8 +1,8 @@
 open Aoc2023.Util
 open Aoc2023.Parsing
 
-let parse_sint = (p_new (fun neg i -> if Option.is_some neg then -i else i) 
-  |= p_str_opt "-" |= p_int)
+let parse_sint = p_new (fun neg i -> if neg then -i else i) 
+|= (p_str_opt "-" +> Option.is_some) |= p_int
 
 let parse_input = p_any (p_more (parse_sint |. p_sps) |. p_lf_opt)
 
@@ -17,10 +17,5 @@ let extrapolate nums =
   diffseq (List.rev nums) |> List.map List.hd |> sum
 
 
-let part1 input = parse_string parse_input input
-|> List.map extrapolate
-|> sum
-
-let part2 input = parse_string parse_input input
-|> List.map (List.rev >> extrapolate)
-|> sum
+let solve transform = parse_string parse_input >> List.map (transform >> extrapolate) >> sum
+let part1, part2 = solve Fun.id, solve List.rev
