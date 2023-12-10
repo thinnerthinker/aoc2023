@@ -1,8 +1,7 @@
 open Aoc2023.Util
 open Aoc2023.Parsing
 
-let parse_input = p_new (fun ls l -> (ls @ [l]) |> List.map Array.of_list |> Array.of_list)
-|= p_any (p_end_lf) |= p_end_lf_opt
+let parse = String.split_on_char '\n' >> List.map (char_list_of_string >> Array.of_list) >> Array.of_list
 
 let find_start graph = 
   let index = ref (-1, -1) in
@@ -64,9 +63,9 @@ let enclosed_tiles =
   List.map (scan false '.') >> sum
 
 
-let part1 input = (parse_string parse_input input |> loop |> List.length) / 2
+let part1 input = (parse input |> loop |> List.length) / 2
 let part2 input = 
-  let graph = parse_string parse_input input in
+  let graph = parse input in
   let loop = loop graph in
 
   let (d1r, d1c), (sr, sc), (d2r, d2c) = List.hd loop, List.nth loop (List.length loop - 1), List.nth loop (List.length loop - 2) in
