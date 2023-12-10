@@ -70,6 +70,7 @@ let part2 input =
 
   let (d1r, d1c), (sr, sc), (d2r, d2c) = List.hd loop, List.nth loop (List.length loop - 1), List.nth loop (List.length loop - 2) in
   let start = node_of_dirs (d1r - sr, d1c - sc) (d2r - sr, d2c - sc) in
+  
   graph |> Array.mapi (fun r -> Array.mapi (fun c e -> if r == sr && c == sc then start else e))
   |> keep_coords loop
   |> Array.map Array.to_list |> Array.to_list 
