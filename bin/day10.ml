@@ -58,7 +58,7 @@ let enclosed_tiles =
     | 'J', 'L' | 'L', 'J' | '7', 'F' | 'F', '7' -> scan (not inside) '.' ts
     | 'J', 'F' | 'F', 'J' | '7', 'L' | 'L', '7' -> scan inside '.' ts
     | '.', bend -> scan (not inside) bend ts
-    | y, x -> raise (Invalid_argument (string_of_char_list [y; x])))
+    | _ -> raise Unreachable)
   in
   List.map (scan false '.') >> sum
 
