@@ -4,15 +4,14 @@ open Aoc2023.Parsing
 let parse_input = p_new (fun ls l -> (ls @ [l]) |> List.map Array.of_list |> Array.of_list)
 |= p_any (p_end_lf) |= p_end_lf_opt
 
-let find_start = Array.mapi (fun i row -> i, 
-  row |> Array.mapi (fun i col -> if col == 'S' then Some i else None) 
-  |> Array.find_opt Option.is_some |> Option.join)
->> Array.find_opt (snd >> Option.is_some) >> Option.get
->> (fun (i, j) -> i, Option.get j)
+let find_start graph = 
+  let index = ref (-1, -1) in
+  Array.iteri (fun r -> Array.iteri (fun c e -> if e == 'S' then index := r, c)) graph;
+  !index
 
 let loop graph = 
   let sr, sc = find_start graph in
-  let get_opt i a = if i < 0 || i >= Array.length a then None else Some (Array.get a i) in
+  let get_opt i a = if i < 0 || i >= Array.length a then None else Some a.(i) in
   let ind_opt r c = Option.bind (get_opt r graph) (get_opt c) in
   
   let start_dir = match ind_opt (sr - 1) sc, ind_opt (sr + 1) sc, ind_opt sr (sc - 1), ind_opt sr (sc + 1) with
@@ -25,7 +24,7 @@ let loop graph =
 
   let rec walk (r, c) (dr, dc) =
     let nr, nc = r + dr, c + dc in
-    (nr, nc) :: match Array.get (Array.get graph nr) nc with
+    (nr, nc) :: match graph.(nr).(nc) with
     | 'S' -> []
     | '|' | '-' -> walk (nr, nc) (dr, dc)
     | '7' | 'L' when dc != 0 -> walk (nr, nc) (dc, 0)
@@ -45,8 +44,10 @@ let node_of_dirs d1 d2 = match d1, d2 with
 | (1, 0), (0, -1) | (0, -1), (1, 0) -> '7'
 | _ -> raise Unreachable
 
-let keep_coords coords = Array.mapi (fun r -> Array.mapi (fun c e -> 
-    if List.exists (fun (cr, cc) -> cr == r && cc == c) coords then e else '.'))
+let keep_coords coords graph =
+  let new_graph = Array.make_matrix (Array.length graph) (Array.length graph.(0)) '.' in
+  List.iter (fun (r, c) -> new_graph.(r).(c) <- graph.(r).(c)) coords;
+  new_graph
 
 let enclosed_tiles = 
   let rec scan inside last = function
@@ -70,8 +71,10 @@ let part2 input =
 
   let (d1r, d1c), (sr, sc), (d2r, d2c) = List.hd loop, List.nth loop (List.length loop - 1), List.nth loop (List.length loop - 2) in
   let start = node_of_dirs (d1r - sr, d1c - sc) (d2r - sr, d2c - sc) in
-  
-  graph |> Array.mapi (fun r -> Array.mapi (fun c e -> if r == sr && c == sc then start else e))
+
+  graph.(sr).(sc) <- start;
+
+  graph
   |> keep_coords loop
   |> Array.map Array.to_list |> Array.to_list 
   |> enclosed_tiles
