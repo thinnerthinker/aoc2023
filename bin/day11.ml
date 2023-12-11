@@ -27,5 +27,4 @@ let solve factor input =
   (Seq.map_product (fun (x1, y1) (x2, y2) -> abs (x2 - x1) + abs (y2 - y1)) galaxies galaxies
   |> Seq.fold_left (+) 0) / 2
 
-let part1 = solve 2
-let part2 = solve 1_000_000
+let part1, part2 = solve 2, solve 1_000_000
