@@ -24,6 +24,7 @@ let map_hproduct2 mapping l =
   in
   map l |> List.flatten
 
+
 let solve factor input = 
   let galaxies = parse input 
   |> expand_by factor fst (fun x p -> x, snd p)
