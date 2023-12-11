@@ -17,14 +17,19 @@ let expand_by factor property make_new l =
   let l = List.sort (fun a b -> Int.compare (property a) (property b)) l in
   List.map2 (fun e x -> make_new (e + property x) x) (0 :: exp 0 (List.map property l)) l
 
+let map_hproduct2 mapping l = 
+  let rec map = function
+  | x :: xs -> List.map (mapping x) xs :: map xs
+  | [] -> [[]]
+  in
+  map l |> List.flatten
 
 let solve factor input = 
   let galaxies = parse input 
   |> expand_by factor fst (fun x p -> x, snd p)
   |> expand_by factor snd (fun y p -> fst p, y)
-  |> List.to_seq 
   in
-  (Seq.map_product (fun (x1, y1) (x2, y2) -> abs (x2 - x1) + abs (y2 - y1)) galaxies galaxies
-  |> Seq.fold_left (+) 0) / 2
+  map_hproduct2 (fun (x1, y1) (x2, y2) -> abs (x2 - x1) + abs (y2 - y1)) galaxies
+  |> sum
 
 let part1, part2 = solve 2, solve 1_000_000
