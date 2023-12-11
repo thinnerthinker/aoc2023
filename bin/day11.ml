@@ -9,7 +9,7 @@ let parse = String.split_on_char '\n' >> List.mapi (fun y -> char_list_of_string
 let expand_by factor property make_new l = 
   let rec exp acc = function
   | x1 :: x2 :: xs -> 
-    let d = (x2 - x1) in
+    let d = x2 - x1 in
     let e = acc + if d <= 1 then 0 else (d - 1) * (factor - 1) in
     e :: exp e (x2 :: xs)
   | _ -> []
